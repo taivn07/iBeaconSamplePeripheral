@@ -23,10 +23,12 @@
 {
     [super viewDidLoad];
     
+    greet.text = @"Hello! I'm a Beacon";
+    
     self.proximityUUID = [[NSUUID alloc] initWithUUIDString:@"D456894A-02F0-4CB0-8258-81C187DF45C2"];
     
     self.peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil options:nil];
-    if (self.peripheralManager.state == CBPeripheralManagerStatePoweredOn) {
+    if (self.peripheralManager.state == CBPeripheralManagerStatePoweredOn && advertising.on) {
         [self startAdvertising];
     }
 }
@@ -35,6 +37,14 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)switchAdvertising:(id)sender {
+    if (advertising.on) {
+        [self startAdvertising];
+    } else {
+        [self.peripheralManager stopAdvertising];
+    }
 }
 
 - (void)peripheralManagerDidStartAdvertising:(CBPeripheralManager *)peripheral error:(NSError *)error
